@@ -11,9 +11,9 @@ import java.awt.geom.AffineTransform;
 public class Player {
 	private String name;
 	private int score;
-	private static final Toolkit TLK = Toolkit.getDefaultToolkit(); // ÓÃÀ´½«Í¼Æ¬¶ÁÈëImageÊı×é
+	private static final Toolkit TLK = Toolkit.getDefaultToolkit(); // ç”¨æ¥å°†å›¾ç‰‡è¯»å…¥Imageæ•°ç»„
 	private final Image head;
-	private int state; // Íæ¼Òµ±Ç°¸Ã»÷Ê²Ã´Çò
+	private int state; // ç©å®¶å½“å‰è¯¥å‡»ä»€ä¹ˆçƒ
 	private final AffineTransform at = new AffineTransform();
 
 	public Player(int n, String name) {
@@ -53,10 +53,10 @@ public class Player {
 		g2d.setFont(new Font("Bradley Hand ITC", Font.BOLD, 24));
 		g2d.drawString(name, 104, 50);
 		// g2d.setColor(Color.cyan);
-		// g2d.setFont(new Font("¿¬Ìå",Font.CENTER_BASELINE,20));
-		// g2d.drawString("ÄãÓ¦µ±»÷", 104,76);
-		// g2d.setFont(new Font("¿¬Ìå",Font.CENTER_BASELINE,48));
+		// g2d.setFont(new Font("æ¥·ä½“",Font.CENTER_BASELINE,20));
+		// g2d.drawString("ä½ åº”å½“å‡»", 104,76);
+		// g2d.setFont(new Font("æ¥·ä½“",Font.CENTER_BASELINE,48));
 		// g2d.setColor(Color.red);
-		// g2d.drawString((state==1)?"²Ê":"ºì", 120, 120);
+		// g2d.drawString((state==1)?"å½©":"çº¢", 120, 120);
 	}
 }

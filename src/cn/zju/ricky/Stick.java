@@ -4,18 +4,18 @@ import java.awt.*;
 import java.awt.geom.*;
 
 public class Stick {
-	private double angle, old_angle; // Çò¸Ë½Ç¶È
+	private double angle, old_angle; // çƒæ†è§’åº¦
 	private double stick_x, stick_y;
-	private final Image stickImg; // Çò¸ËÍ¼Æ¬
+	private final Image stickImg; // çƒæ†å›¾ç‰‡
 	private final int imgWidth = 13;
-	private boolean hitting; // »÷Çò¶¯»­Ïß³Ì
-	private Ball centerBall; // ¸ËËù»÷µÄÇò
+	private boolean hitting; // å‡»çƒåŠ¨ç”»çº¿ç¨‹
+	private Ball centerBall; // æ†æ‰€å‡»çš„çƒ
 	private Point mouse;
 	private double ti;
-	private double dis, old_dis; // ¸Ëµ½ÇòµÄ¾àÀë
-	private double force; // »÷ÇòÁ¦¶È
-	private static final Toolkit TLK = Toolkit.getDefaultToolkit(); // ÓÃÀ´½«Í¼Æ¬¶ÁÈëImageÊı×é
-	private AffineTransform at = null; // ÓÃÓÚ¸ËµÄĞı×ª
+	private double dis, old_dis; // æ†åˆ°çƒçš„è·ç¦»
+	private double force; // å‡»çƒåŠ›åº¦
+	private static final Toolkit TLK = Toolkit.getDefaultToolkit(); // ç”¨æ¥å°†å›¾ç‰‡è¯»å…¥Imageæ•°ç»„
+	private AffineTransform at = null; // ç”¨äºæ†çš„æ—‹è½¬
 	private boolean hidden = true;
 
 	public Stick(Ball ball) {

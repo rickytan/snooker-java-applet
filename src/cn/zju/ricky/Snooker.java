@@ -7,530 +7,558 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 
 public class Snooker extends Applet implements MouseListener,
-		MouseMotionListener, KeyListener {
+        MouseMotionListener, KeyListener {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	// ¶¯»­Ïß³Ì
-	private Thread snooker;
-	// Åö×²¼ì²âÏß³Ì
-	// private Thread checkcollision;
-	// Ë«»º³å£¬¼õÉÙÉÁË¸
-	private Image offscreen;
-	private final static BufferedImage bimg = new BufferedImage(240, 140,
-			BufferedImage.TYPE_4BYTE_ABGR);
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+    // åŠ¨ç”»çº¿ç¨‹
+    private Thread snooker;
+	// ç¢°æ’æ£€æµ‹çº¿ç¨‹
+    // private Thread checkcollision;
+    // åŒç¼“å†²ï¼Œå‡å°‘é—ªçƒ
+    private Image offscreen;
+    private final static BufferedImage bimg = new BufferedImage(240, 140,
+            BufferedImage.TYPE_4BYTE_ABGR);
 
-	// Ì¨ÉÏµÄÇòµÄÁ´±í
-	private ArrayList<Ball> balls;
-	private boolean putWhiteBall;
-	private Ball whiteball;
-	// Ä³Ò»¸ËµÄ½øÇò¸öÊı
-	private ArrayList<Ball> ballin = new ArrayList<Ball>();
-	// Ì¨ÃæÉÏµÄºìÇò¸öÊı
-	private int redBalls;
-	private int firstColli;
-	// Çò¸Ë
-	private Stick stick;
-	// Á½¸öÍæ¼Ò
-	private Player[] players;
-	// Çò×À
-	private Table table;
-	// Á¦Á¿Ìõ
-	private Powerbar powerbar;
-	// µ±Ç°ÂÖÁ÷´ÎĞò
-	private int turns;
-	// ÓÎÏ·½áÊø
-	private boolean gameOver;
-	private boolean moving;
-	private int state;
+    // å°ä¸Šçš„çƒçš„é“¾è¡¨
+    private ArrayList<Ball> balls;
+    private boolean putWhiteBall;
+    private Ball whiteball;
+    // æŸä¸€æ†çš„è¿›çƒä¸ªæ•°
+    private ArrayList<Ball> ballin = new ArrayList<Ball>();
+    // å°é¢ä¸Šçš„çº¢çƒä¸ªæ•°
+    private int redBalls;
+    private int firstColli;
+    // çƒæ†
+    private Stick stick;
+    // ä¸¤ä¸ªç©å®¶
+    private Player[] players;
+    // çƒæ¡Œ
+    private Table table;
+    // åŠ›é‡æ¡
+    private Powerbar powerbar;
+    // å½“å‰è½®æµæ¬¡åº
+    private int turns;
+    // æ¸¸æˆç»“æŸ
+    private boolean gameOver;
+    private boolean moving;
+    private int state;
 
-	public void init() {
-		this.setSize(742, 560);
-		this.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
-		// setBackground(Color.black);
-		offscreen = createImage(getWidth(), getHeight());
+    public void init() {
+        this.setSize(742, 560);
+        this.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
+        // setBackground(Color.black);
+        offscreen = createImage(getWidth(), getHeight());
 
-		// java.net.URL baseURL = getCodeBase();
-		table = new Table();
-		firstColli = -1;
-		balls = initBalls();
-		redBalls = 15;
-		stick = new Stick(balls.get(0));
-		stick.hide(true);
-		powerbar = new Powerbar();
-		players = new Player[2];
-		players[0] = new Player(0, "Steven");
-		players[1] = new Player(1, "O'Saliven");
-		turns = 0;
-		gameOver = false;
-		putWhiteBall = true;
-		state = 0;
-		moving = false;
-		firstColli = -1;
-		String[] s = { "ball/black.png", "ball/blue.png", "ball/brown.png",
-				"ball/green.png", "ball/pink.png", "ball/red.png",
-				"ball/white.png", "ball/yellow.png", "player/player0.jpg",
-				"player/player1.jpg", "stick/stick.png", "talbe.png" };
-		Image img;
-		MediaTracker mt = new MediaTracker(this);
-		for (int i=0;i<s.length;i++){
-			img = getImage(getCodeBase(),"Image"+s[i]);
-			mt.addImage(img, i);
-		}
-		try {
-			mt.waitForAll();
-		} catch (InterruptedException e) {
-			System.out.println(e);
-			return;
-		}
-		this.addMouseMotionListener(this);
-		this.addMouseListener(this);
-		snooker = new Thread(new Refresh());
-		snooker.start();
-	}
+        // java.net.URL baseURL = getCodeBase();
+        table = new Table();
+        firstColli = -1;
+        balls = initBalls();
+        redBalls = 15;
+        stick = new Stick(balls.get(0));
+        stick.hide(true);
+        powerbar = new Powerbar();
+        players = new Player[2];
+        players[0] = new Player(0, "Steven");
+        players[1] = new Player(1, "O'Saliven");
+        turns = 0;
+        gameOver = false;
+        putWhiteBall = true;
+        state = 0;
+        moving = false;
+        firstColli = -1;
+        String[] s = {"ball/black.png", "ball/blue.png", "ball/brown.png",
+            "ball/green.png", "ball/pink.png", "ball/red.png",
+            "ball/white.png", "ball/yellow.png", "player/player0.jpg",
+            "player/player1.jpg", "stick/stick.png", "talbe.png"};
+        Image img;
+        MediaTracker mt = new MediaTracker(this);
+        for (int i = 0; i < s.length; i++) {
+            img = getImage(getCodeBase(), "Image" + s[i]);
+            mt.addImage(img, i);
+        }
+        try {
+            mt.waitForAll();
+        } catch (InterruptedException e) {
+            System.out.println(e);
+            return;
+        }
+        this.addMouseMotionListener(this);
+        this.addMouseListener(this);
+        snooker = new Thread(new Refresh());
+        snooker.start();
+    }
 
-	public void paint(Graphics g) {
-		table.draw(g);
-		Graphics2D P;
-		for (int i = 0; i < players.length; i++) {
-			P = bimg.createGraphics();
-			P.setBackground(Color.yellow);
-			players[i].draw(P);
-			((Graphics2D) g).drawImage(bimg, i * 480 + 10, 10, null);
-			P.dispose();
-			g.setColor(Color.green);
-		}
-		// »æÖÆ±íÃ÷´ÎĞòµÄÏß¿ò
-		g.drawRect(10 + 480 * turns, 10, 240, 140);
-		// ¿ªÊ¼ÈÏÎªÃ»ÓĞÇò¶¯ÁË
-		moving = false;
+    public void paint(Graphics g) {
+        table.draw(g);
+        Graphics2D P;
+        for (int i = 0; i < players.length; i++) {
+            P = bimg.createGraphics();
+            P.setBackground(Color.yellow);
+            players[i].draw(P);
+            ((Graphics2D) g).drawImage(bimg, i * 480 + 10, 10, null);
+            P.dispose();
+            g.setColor(Color.green);
+        }
+        // ç»˜åˆ¶è¡¨æ˜æ¬¡åºçš„çº¿æ¡†
+        g.drawRect(10 + 480 * turns, 10, 240, 140);
+        // å¼€å§‹è®¤ä¸ºæ²¡æœ‰çƒåŠ¨äº†
+        moving = false;
 
-		for (int i = 0; i < balls.size(); i++) {
-			Ball ball1 = balls.get(i);
-			if (ball1.isIn())
-				continue;
-			if (table.ballIn(ball1)) {
-				if (1 <= i && i <= 15)
-					redBalls--; // ºìÇòÊı¼õÒ»
-				ballin.add(ball1);
-				ball1.setIn(true);
-			}
-			if (ball1.getSpeed().getV() != 0)
-				moving = true; // ÓĞÒ»¸öÇòËÙ¶È²»Îª0£¬¾ÍÓĞÇòÒª¶¯
-			for (int j = i + 1; j < balls.size(); j++) {
-				Ball ball2 = balls.get(j);
-				if (ball2.isIn())
-					continue;
-				if (ball1.isCollision(ball2)) {
-					if (firstColli == -1)
-						firstColli = j; // Èç¹û»¹Ã»×²µ½Çò£¬Õâ¾ÍÊÇµÚÒ»¸ö×²µ½µÄÇò
-					ball1.collision2(ball2);
-				}
-			}
-			if (table.isCollision(ball1)) {
-				table.collision(ball1);
-			}
-			ball1.draw(g);
-		}
-		if (putWhiteBall) {
-			stick.hide(true);
-			stick.putMainBall(whiteball);
-		} else {
-			if (!moving && stick.getHideStatus()) {
-				check2();
-			}
-		}
-		powerbar.draw(g);
-		String cb;
-		if (state == 0 || state == 2)
-			cb = "ºì";
-		else
-			cb = "²Ê";
-		g.setFont(new Font("¿¬Ìå", Font.CENTER_BASELINE, 24));
-		g.setColor(Color.yellow);
-		g.drawString("ÄãÓ¦»÷" + cb + "Çò", 310, 120);
-		stick.draw(g);
-	}
+        for (int i = 0; i < balls.size(); i++) {
+            Ball ball1 = balls.get(i);
+            if (ball1.isIn()) {
+                continue;
+            }
+            if (table.ballIn(ball1)) {
+                if (1 <= i && i <= 15) {
+                    redBalls--; // çº¢çƒæ•°å‡ä¸€
+                }
+                ballin.add(ball1);
+                ball1.setIn(true);
+            }
+            if (ball1.getSpeed().getV() != 0) {
+                moving = true; // æœ‰ä¸€ä¸ªçƒé€Ÿåº¦ä¸ä¸º0ï¼Œå°±æœ‰çƒè¦åŠ¨
+            }
+            for (int j = i + 1; j < balls.size(); j++) {
+                Ball ball2 = balls.get(j);
+                if (ball2.isIn()) {
+                    continue;
+                }
+                if (ball1.isCollision(ball2)) {
+                    if (firstColli == -1) {
+                        firstColli = j; // å¦‚æœè¿˜æ²¡æ’åˆ°çƒï¼Œè¿™å°±æ˜¯ç¬¬ä¸€ä¸ªæ’åˆ°çš„çƒ
+                    }
+                    ball1.collision2(ball2);
+                }
+            }
+            if (table.isCollision(ball1)) {
+                table.collision(ball1);
+            }
+            ball1.draw(g);
+        }
+        if (putWhiteBall) {
+            stick.hide(true);
+            stick.putMainBall(whiteball);
+        } else {
+            if (!moving && stick.getHideStatus()) {
+                check2();
+            }
+        }
+        powerbar.draw(g);
+        String cb;
+        if (state == 0 || state == 2) {
+            cb = "çº¢";
+        } else {
+            cb = "å½©";
+        }
+        g.setFont(new Font("æ¥·ä½“", Font.CENTER_BASELINE, 24));
+        g.setColor(Color.yellow);
+        g.drawString("ä½ åº”å‡»" + cb + "çƒ", 310, 120);
+        stick.draw(g);
+    }
 
-	public void update(Graphics g) {
-		if (offscreen == null || offscreen.getHeight(null) != this.getHeight()
-				|| offscreen.getWidth(null) != this.getWidth()) {
-			offscreen = createImage(getWidth(), getHeight());
-		}
-		g.drawImage(offscreen, 0, 0, null);
-		Graphics bufferg = offscreen.getGraphics();
-		bufferg.setColor(Color.black);
-		bufferg.fillRect(0, 0, getWidth(), getHeight());
-		paint(bufferg);
-		bufferg.dispose();
-	}
+    public void update(Graphics g) {
+        if (offscreen == null || offscreen.getHeight(null) != this.getHeight()
+                || offscreen.getWidth(null) != this.getWidth()) {
+            offscreen = createImage(getWidth(), getHeight());
+        }
+        g.drawImage(offscreen, 0, 0, null);
+        Graphics bufferg = offscreen.getGraphics();
+        bufferg.setColor(Color.black);
+        bufferg.fillRect(0, 0, getWidth(), getHeight());
+        paint(bufferg);
+        bufferg.dispose();
+    }
 
-	public ArrayList<Ball> initBalls() {
-		ArrayList<Ball> balls = new ArrayList<Ball>();
-		Ball ball;
-		double t_pos = 550.0;
-		whiteball = ball = new Ball(120.0, 353.0, "white");
-		balls.add(ball);
-		for (int i = 0; i < 5; i++) {
-			for (int j = 0; j <= i; j++) {
-				ball = new Ball(t_pos + 1.732 * (Ball.radius) * i, 353 - i
-						* (Ball.radius) + j * (Ball.radius) * 2, "red");
-				balls.add(ball);
-			}
-		}
-		ball = new Ball(528.0, 353.0, "pink");
-		balls.add(ball);
-		ball = new Ball(173.0, 296.0, "green");
-		balls.add(ball);
-		ball = new Ball(173.0, 353.0, "brown");
-		balls.add(ball);
-		ball = new Ball(173.0, 410.0, "yellow");
-		balls.add(ball);
-		ball = new Ball(371.0, 353.0, "blue");
-		balls.add(ball);
-		ball = new Ball(660.0, 353.0, "black");
-		balls.add(ball);
-		return balls;
-	}
+    public ArrayList<Ball> initBalls() {
+        ArrayList<Ball> balls = new ArrayList<Ball>();
+        Ball ball;
+        double t_pos = 550.0;
+        whiteball = ball = new Ball(120.0, 353.0, "white");
+        balls.add(ball);
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j <= i; j++) {
+                ball = new Ball(t_pos + 1.732 * (Ball.radius) * i, 353 - i
+                        * (Ball.radius) + j * (Ball.radius) * 2, "red");
+                balls.add(ball);
+            }
+        }
+        ball = new Ball(528.0, 353.0, "pink");
+        balls.add(ball);
+        ball = new Ball(173.0, 296.0, "green");
+        balls.add(ball);
+        ball = new Ball(173.0, 353.0, "brown");
+        balls.add(ball);
+        ball = new Ball(173.0, 410.0, "yellow");
+        balls.add(ball);
+        ball = new Ball(371.0, 353.0, "blue");
+        balls.add(ball);
+        ball = new Ball(660.0, 353.0, "black");
+        balls.add(ball);
+        return balls;
+    }
 
-	public void check() {
-		// Ã»Åöµ½Çò£¬»»ÈË£¬¶ÔÊÖ¼Ó·Ö
-		if (firstColli == -1) {
-			players[turns].setState(0); // µ±Ç°Íæ¼ÒÏÂ´ÎÒª»÷ºìÇò
-			turns ^= 1; // »»ÈË
-			players[turns].add(2); // ¶ÔÊÖ¼Ó·Ö
-		}
-		// Åöµ½Çò£¬ÇÒ»÷¶ÔÑÕÉ«
-		else if (players[turns].getState() == ((firstColli <= 15) ? 0 : 1)) {
-			for (int i = 0; i < ballin.size(); i++) {
-				if (ballin.get(i).getType() == 1) {
-					ballin.get(i).reset(); // ½«²ÊÇò»Ö¸´
-				} else if (players[turns].getState() == 1) {
+    public void check() {
+        // æ²¡ç¢°åˆ°çƒï¼Œæ¢äººï¼Œå¯¹æ‰‹åŠ åˆ†
+        if (firstColli == -1) {
+            players[turns].setState(0); // å½“å‰ç©å®¶ä¸‹æ¬¡è¦å‡»çº¢çƒ
+            turns ^= 1; // æ¢äºº
+            players[turns].add(2); // å¯¹æ‰‹åŠ åˆ†
+        } // ç¢°åˆ°çƒï¼Œä¸”å‡»å¯¹é¢œè‰²
+        else if (players[turns].getState() == ((firstColli <= 15) ? 0 : 1)) {
+            for (int i = 0; i < ballin.size(); i++) {
+                if (ballin.get(i).getType() == 1) {
+                    ballin.get(i).reset(); // å°†å½©çƒæ¢å¤
+                } else if (players[turns].getState() == 1) {
 
-				}
-				players[turns].add(balls.get(i).score());
-			}
-		}
-		boolean colorball = false;
-		for (int i = 16; i < balls.size(); i++) {
-			if (!balls.get(i).isIn()) {
-				colorball = true;
-				break;
-			}
-		}
-		// Èç¹û²ÊÇòÃ»ÓĞ»÷Íê
-		if (colorball) {
+                }
+                players[turns].add(balls.get(i).score());
+            }
+        }
+        boolean colorball = false;
+        for (int i = 16; i < balls.size(); i++) {
+            if (!balls.get(i).isIn()) {
+                colorball = true;
+                break;
+            }
+        }
+        // å¦‚æœå½©çƒæ²¡æœ‰å‡»å®Œ
+        if (colorball) {
 
-		} else {
+        } else {
 
-		}
-		stick.hide(false);
-	}
+        }
+        stick.hide(false);
+    }
 
-	public void check2() {
-		switch (state) {
-		case 0: // ³õÊ¼×´Ì¬£¬¸Õ»»ÈË»òÓÎÏ·¸Õ¿ªÊ¼
-			if (whiteball.isIn()) {
-				turns ^= 1; // »»ÈË
-				players[turns].add(2); // ¶ÔÊÖ¼Ó·Ö
-				for (int i = 0; i < ballin.size(); i++) {
-					Ball b = ballin.get(i);
-					if (b.score() >= 2)
-						b.setToLastPos(); // ²ÊÇò¼Óµ½ÉÏ´ÎÎ»ÖÃ
-				}
-				putWhiteBall = true;
-				if (redBalls <= 0)
-					state = 3;
-			} else {
-				if (1 <= firstColli && firstColli <= 15) { // »÷¶ÔÇò
-					if (!ballin.isEmpty()) {
-						for (int i = 0; i < ballin.size(); i++) {
-							Ball b = ballin.get(i);
-							players[turns].add(b.score()); // ½øÇòµÃ·Ö
-							if (b.score() > 2)
-								b.reset();
-						}
-						state = 1;
-					} else
-						turns ^= 1;
-				} else { // »÷´íÇò
-					turns ^= 1;
-					players[turns].add(2); // ¶ÔÊÖ¼Ó·Ö
-					for (int i = 0; i < ballin.size(); i++) {
-						Ball b = ballin.get(i);
-						if (b.score() >= 2) {
-							b.setToLastPos(); // ²ÊÇò¼Óµ½ÉÏ´ÎÎ»ÖÃ
-							b.setIn(false);
-						}
-					}
-					if (redBalls <= 0)
-						state = 3;
-				}
-			}
-			break;
-		case 1: // ÒÑ½øÁËÒ»¸öºìÇò
-			if (whiteball.isIn()) {
-				turns ^= 1; // »»ÈË
-				players[turns].add(2); // ¶ÔÊÖ¼Ó·Ö
-				for (int i = 0; i < ballin.size(); i++) {
-					Ball b = ballin.get(i);
-					if (b.score() >= 2)
-						b.setToLastPos(); // ²ÊÇò¼Óµ½ÉÏ´ÎÎ»ÖÃ
-				}
-				putWhiteBall = true;
-				if (redBalls <= 0)
-					state = 3;
-				else
-					state = 0;
-			} else {
-				if (16 <= firstColli) { // »÷¶ÔÇò
-					if (!ballin.isEmpty()) {
-						for (int i = 0; i < ballin.size(); i++) {
-							Ball b = ballin.get(i);
-							players[turns].add(b.score()); // ½øÇòµÃ·Ö
-							if (b.score() > 2)
-								b.reset();
-						}
-						if (redBalls <= 0)
-							state = 3;
-						else
-							state = 2;
-					} else {
-						turns ^= 1;
-						state = 0;
-					}
-				} else { // »÷´íÇò
-					turns ^= 1;
-					players[turns].add(2); // ¶ÔÊÖ¼Ó·Ö
-					for (int i = 0; i < ballin.size(); i++) {
-						Ball b = ballin.get(i);
-						if (b.score() >= 2) {
-							b.setToLastPos(); // ²ÊÇò¼Óµ½ÉÏ´ÎÎ»ÖÃ
-							b.setIn(false);
-						}
-					}
-					if (redBalls <= 0)
-						state = 3;
-					else
-						state = 0;
-				}
-			}
-			break;
-		case 2: // ÒÑ½øÁËÒ»¸ö²ÊÇò
-			if (whiteball.isIn()) {
-				turns ^= 1; // »»ÈË
-				players[turns].add(2); // ¶ÔÊÖ¼Ó·Ö
-				for (int i = 0; i < ballin.size(); i++) {
-					Ball b = ballin.get(i);
-					if (b.score() >= 2)
-						b.setToLastPos(); // ²ÊÇò¼Óµ½ÉÏ´ÎÎ»ÖÃ
-				}
-				putWhiteBall = true;
-				if (redBalls <= 0)
-					state = 3;
-				else
-					state = 0;
-			} else {
-				if (1 <= firstColli && firstColli <= 15) { // »÷¶ÔÇò
-					if (!ballin.isEmpty()) {
-						for (int i = 0; i < ballin.size(); i++) {
-							Ball b = ballin.get(i);
-							players[turns].add(b.score()); // ½øÇòµÃ·Ö
-							if (b.score() > 2)
-								b.reset();
-						}
-						state = 1;
-					} else {
-						turns ^= 1;
-						state = 0;
-					}
-				} else { // »÷´íÇò
-					turns ^= 1;
-					players[turns].add(2); // ¶ÔÊÖ¼Ó·Ö
-					for (int i = 0; i < ballin.size(); i++) {
-						Ball b = ballin.get(i);
-						if (b.score() >= 2) {
-							b.setToLastPos(); // ²ÊÇò¼Óµ½ÉÏ´ÎÎ»ÖÃ
-							b.setIn(false);
-						}
-					}
-					if (redBalls <= 0)
-						state = 3;
-					else
-						state = 0;
-				}
-			}
-			break;
-		case 3: // ºìÇòÃ»ÁË
-			if (whiteball.isIn()) {
-				turns ^= 1; // »»ÈË
-				players[turns].add(2); // ¶ÔÊÖ¼Ó·Ö
-				for (int i = 0; i < ballin.size(); i++) {
-					Ball b = ballin.get(i);
-					if (b.score() >= 2)
-						b.setToLastPos(); // ²ÊÇò¼Óµ½ÉÏ´ÎÎ»ÖÃ
-				}
-				putWhiteBall = true;
-			} else {
-				int ballTo;
-				for (ballTo = 16; ballTo <= 21; ballTo++) {
-					if (!balls.get(ballTo).isIn())
-						break;
-				}
-				if (ballTo != 22) {
-					if (firstColli == ballTo) {
-						if (!ballin.isEmpty()) {
-							for (int i = 0; i < ballin.size(); i++) {
-								Ball b = ballin.get(i);
-								players[turns].add(b.score()); // ½øÇòµÃ·Ö
-								if (b.score() > balls.get(ballTo).score())
-									b.reset();
-							}
-							if (ballTo == 21)
-								gameOver = true;
-						} else
-							turns ^= 1;
-					} else {
-						turns ^= 1;
-						players[turns].add(2); // ¶ÔÊÖ¼Ó·Ö
-						for (int i = 0; i < ballin.size(); i++) {
-							Ball b = ballin.get(i);
-							if (b.score() >= 2) {
-								b.setToLastPos(); // ²ÊÇò¼Óµ½ÉÏ´ÎÎ»ÖÃ
-								b.setIn(false);
-							}
-						}
-					}
-				} else {
-					gameOver = true;
-				}
-			}
-			break;
-		}
-		ballin.removeAll(ballin);
-		if (putWhiteBall)
-			whiteball.reset();
-		else
-			stick.hide(false);
-	}
+    public void check2() {
+        switch (state) {
+            case 0: // åˆå§‹çŠ¶æ€ï¼Œåˆšæ¢äººæˆ–æ¸¸æˆåˆšå¼€å§‹
+                if (whiteball.isIn()) {
+                    turns ^= 1; // æ¢äºº
+                    players[turns].add(2); // å¯¹æ‰‹åŠ åˆ†
+                    for (int i = 0; i < ballin.size(); i++) {
+                        Ball b = ballin.get(i);
+                        if (b.score() >= 2) {
+                            b.setToLastPos(); // å½©çƒåŠ åˆ°ä¸Šæ¬¡ä½ç½®
+                        }
+                    }
+                    putWhiteBall = true;
+                    if (redBalls <= 0) {
+                        state = 3;
+                    }
+                } else {
+                    if (1 <= firstColli && firstColli <= 15) { // å‡»å¯¹çƒ
+                        if (!ballin.isEmpty()) {
+                            for (int i = 0; i < ballin.size(); i++) {
+                                Ball b = ballin.get(i);
+                                players[turns].add(b.score()); // è¿›çƒå¾—åˆ†
+                                if (b.score() > 2) {
+                                    b.reset();
+                                }
+                            }
+                            state = 1;
+                        } else {
+                            turns ^= 1;
+                        }
+                    } else { // å‡»é”™çƒ
+                        turns ^= 1;
+                        players[turns].add(2); // å¯¹æ‰‹åŠ åˆ†
+                        for (int i = 0; i < ballin.size(); i++) {
+                            Ball b = ballin.get(i);
+                            if (b.score() >= 2) {
+                                b.setToLastPos(); // å½©çƒåŠ åˆ°ä¸Šæ¬¡ä½ç½®
+                                b.setIn(false);
+                            }
+                        }
+                        if (redBalls <= 0) {
+                            state = 3;
+                        }
+                    }
+                }
+                break;
+            case 1: // å·²è¿›äº†ä¸€ä¸ªçº¢çƒ
+                if (whiteball.isIn()) {
+                    turns ^= 1; // æ¢äºº
+                    players[turns].add(2); // å¯¹æ‰‹åŠ åˆ†
+                    for (int i = 0; i < ballin.size(); i++) {
+                        Ball b = ballin.get(i);
+                        if (b.score() >= 2) {
+                            b.setToLastPos(); // å½©çƒåŠ åˆ°ä¸Šæ¬¡ä½ç½®
+                        }
+                    }
+                    putWhiteBall = true;
+                    if (redBalls <= 0) {
+                        state = 3;
+                    } else {
+                        state = 0;
+                    }
+                } else {
+                    if (16 <= firstColli) { // å‡»å¯¹çƒ
+                        if (!ballin.isEmpty()) {
+                            for (int i = 0; i < ballin.size(); i++) {
+                                Ball b = ballin.get(i);
+                                players[turns].add(b.score()); // è¿›çƒå¾—åˆ†
+                                if (b.score() > 2) {
+                                    b.reset();
+                                }
+                            }
+                            if (redBalls <= 0) {
+                                state = 3;
+                            } else {
+                                state = 2;
+                            }
+                        } else {
+                            turns ^= 1;
+                            state = 0;
+                        }
+                    } else { // å‡»é”™çƒ
+                        turns ^= 1;
+                        players[turns].add(2); // å¯¹æ‰‹åŠ åˆ†
+                        for (int i = 0; i < ballin.size(); i++) {
+                            Ball b = ballin.get(i);
+                            if (b.score() >= 2) {
+                                b.setToLastPos(); // å½©çƒåŠ åˆ°ä¸Šæ¬¡ä½ç½®
+                                b.setIn(false);
+                            }
+                        }
+                        if (redBalls <= 0) {
+                            state = 3;
+                        } else {
+                            state = 0;
+                        }
+                    }
+                }
+                break;
+            case 2: // å·²è¿›äº†ä¸€ä¸ªå½©çƒ
+                if (whiteball.isIn()) {
+                    turns ^= 1; // æ¢äºº
+                    players[turns].add(2); // å¯¹æ‰‹åŠ åˆ†
+                    for (int i = 0; i < ballin.size(); i++) {
+                        Ball b = ballin.get(i);
+                        if (b.score() >= 2) {
+                            b.setToLastPos(); // å½©çƒåŠ åˆ°ä¸Šæ¬¡ä½ç½®
+                        }
+                    }
+                    putWhiteBall = true;
+                    if (redBalls <= 0) {
+                        state = 3;
+                    } else {
+                        state = 0;
+                    }
+                } else {
+                    if (1 <= firstColli && firstColli <= 15) { // å‡»å¯¹çƒ
+                        if (!ballin.isEmpty()) {
+                            for (int i = 0; i < ballin.size(); i++) {
+                                Ball b = ballin.get(i);
+                                players[turns].add(b.score()); // è¿›çƒå¾—åˆ†
+                                if (b.score() > 2) {
+                                    b.reset();
+                                }
+                            }
+                            state = 1;
+                        } else {
+                            turns ^= 1;
+                            state = 0;
+                        }
+                    } else { // å‡»é”™çƒ
+                        turns ^= 1;
+                        players[turns].add(2); // å¯¹æ‰‹åŠ åˆ†
+                        for (int i = 0; i < ballin.size(); i++) {
+                            Ball b = ballin.get(i);
+                            if (b.score() >= 2) {
+                                b.setToLastPos(); // å½©çƒåŠ åˆ°ä¸Šæ¬¡ä½ç½®
+                                b.setIn(false);
+                            }
+                        }
+                        if (redBalls <= 0) {
+                            state = 3;
+                        } else {
+                            state = 0;
+                        }
+                    }
+                }
+                break;
+            case 3: // çº¢çƒæ²¡äº†
+                if (whiteball.isIn()) {
+                    turns ^= 1; // æ¢äºº
+                    players[turns].add(2); // å¯¹æ‰‹åŠ åˆ†
+                    for (int i = 0; i < ballin.size(); i++) {
+                        Ball b = ballin.get(i);
+                        if (b.score() >= 2) {
+                            b.setToLastPos(); // å½©çƒåŠ åˆ°ä¸Šæ¬¡ä½ç½®
+                        }
+                    }
+                    putWhiteBall = true;
+                } else {
+                    int ballTo;
+                    for (ballTo = 16; ballTo <= 21; ballTo++) {
+                        if (!balls.get(ballTo).isIn()) {
+                            break;
+                        }
+                    }
+                    if (ballTo != 22) {
+                        if (firstColli == ballTo) {
+                            if (!ballin.isEmpty()) {
+                                for (int i = 0; i < ballin.size(); i++) {
+                                    Ball b = ballin.get(i);
+                                    players[turns].add(b.score()); // è¿›çƒå¾—åˆ†
+                                    if (b.score() > balls.get(ballTo).score()) {
+                                        b.reset();
+                                    }
+                                }
+                                if (ballTo == 21) {
+                                    gameOver = true;
+                                }
+                            } else {
+                                turns ^= 1;
+                            }
+                        } else {
+                            turns ^= 1;
+                            players[turns].add(2); // å¯¹æ‰‹åŠ åˆ†
+                            for (int i = 0; i < ballin.size(); i++) {
+                                Ball b = ballin.get(i);
+                                if (b.score() >= 2) {
+                                    b.setToLastPos(); // å½©çƒåŠ åˆ°ä¸Šæ¬¡ä½ç½®
+                                    b.setIn(false);
+                                }
+                            }
+                        }
+                    } else {
+                        gameOver = true;
+                    }
+                }
+                break;
+        }
+        ballin.removeAll(ballin);
+        if (putWhiteBall) {
+            whiteball.reset();
+        } else {
+            stick.hide(false);
+        }
+    }
 
-	private void winner() {
+    private void winner() {
+        // TODO Auto-generated method stub
+        try {
+            Thread.sleep(40);
+        } catch (InterruptedException e) {
+            // nothing
+        }
+        Graphics bufferg = offscreen.getGraphics();
+        bufferg.setColor(Color.black);
+        bufferg.fillRect(0, 0, getWidth(), getHeight());
+        bufferg.setFont(new Font("Kunstler Script", Font.BOLD, 64));
+        bufferg.setColor(Color.red);
+        bufferg.drawString("The winner is", 20, 80);
+        bufferg.setFont(new Font("Impact", Font.BOLD, 128));
+        bufferg.setColor(Color.yellow);
+        bufferg
+                .drawString(
+                        (players[0].getScore() == players[1].getScore()) ? "BOTH"
+                        : ((players[0].getScore() > players[1]
+                        .getScore()) ? players[0].getName()
+                        : players[1].getName()), 80, 200);
+        this.getGraphics().drawImage(offscreen, 0, 0, this);
+        bufferg.dispose();
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent arg0) {
+        // TODO Auto-generated method stub
+        if (arg0.getModifiers() == MouseEvent.BUTTON1_MASK && !moving) {
+            if (putWhiteBall) {
+                putWhiteBall = false;
+                stick.hide(false);
+            } else {
+                if (!powerbar.getStatus()) {
+                    powerbar.start();
+                } else {
+                    stick.hitBall(powerbar.getPower());
+                    firstColli = -1;
+                }
+            }
+        } else if (arg0.getModifiers() == MouseEvent.BUTTON3_MASK) {
+            powerbar.stop();
+        }
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent arg0) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		try {
-			Thread.sleep(40);
-		} catch (InterruptedException e) {
-			// nothing
-		}
-		Graphics bufferg = offscreen.getGraphics();
-		bufferg.setColor(Color.black);
-		bufferg.fillRect(0, 0, getWidth(), getHeight());
-		bufferg.setFont(new Font("Kunstler Script", Font.BOLD, 64));
-		bufferg.setColor(Color.red);
-		bufferg.drawString("The winner is", 20, 80);
-		bufferg.setFont(new Font("Impact", Font.BOLD, 128));
-		bufferg.setColor(Color.yellow);
-		bufferg
-				.drawString(
-						(players[0].getScore() == players[1].getScore()) ? "BOTH"
-								: ((players[0].getScore() > players[1]
-										.getScore()) ? players[0].getName()
-										: players[1].getName()), 80, 200);
-		this.getGraphics().drawImage(offscreen, 0, 0, this);
-		bufferg.dispose();
-	}
+        // checkcollision = null;
+    }
 
-	@Override
-	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		if (arg0.getModifiers() == MouseEvent.BUTTON1_MASK && !moving) {
-			if (putWhiteBall) {
-				putWhiteBall = false;
-				stick.hide(false);
-			} else {
-				if (!powerbar.getStatus())
-					powerbar.start();
-				else {
-					stick.hitBall(powerbar.getPower());
-					firstColli = -1;
-				}
-			}
-		} else if (arg0.getModifiers() == MouseEvent.BUTTON3_MASK)
-			powerbar.stop();
-	}
+    @Override
+    public void mousePressed(MouseEvent arg0) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+    }
 
-	}
+    @Override
+    public void mouseReleased(MouseEvent arg0) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		// checkcollision = null;
-	}
+    }
 
-	@Override
-	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+    @Override
+    public void mouseDragged(MouseEvent arg0) {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+    @Override
+    public void mouseMoved(MouseEvent arg0) {
+        // TODO Auto-generated method stub
+        if (!powerbar.getStatus()) {
+            stick.setMouse(arg0.getPoint());
+        }
+    }
 
-	}
+    @Override
+    public void keyPressed(KeyEvent arg0) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void mouseDragged(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+    }
 
-	}
+    @Override
+    public void keyReleased(KeyEvent arg0) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void mouseMoved(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		if (!powerbar.getStatus())
-			stick.setMouse(arg0.getPoint());
-	}
+    }
 
-	@Override
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+    @Override
+    public void keyTyped(KeyEvent arg0) {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+    public void stop() {
+        snooker = null;
+    }
 
-	}
+    class Refresh implements Runnable {
 
-	@Override
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void stop() {
-		snooker = null;
-	}
-
-	class Refresh implements Runnable {
-		public void run() {
-			while (!gameOver) {
-				try {
-					repaint();
-					Thread.sleep(20);
-				} catch (InterruptedException e) {
-					// nothing
-				}
-			}
-			winner();
-			snooker = null;
-		}
-	}
+        public void run() {
+            while (!gameOver) {
+                try {
+                    repaint();
+                    Thread.sleep(20);
+                } catch (InterruptedException e) {
+                    // nothing
+                }
+            }
+            winner();
+            snooker = null;
+        }
+    }
 }

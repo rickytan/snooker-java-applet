@@ -5,7 +5,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 public class Powerbar {
-	private int force; // »÷ÇòÁ¦¶È
+	private int force; // å‡»çƒåŠ›åº¦
 	private int flag;
 	private boolean start;
 	private static final Shape reg = new Rectangle(254, 50, 230, 20);
@@ -15,7 +15,7 @@ public class Powerbar {
 	private final GradientPaint g1 = new GradientPaint(p1, Color.yellow, p2,
 			Color.red, true);
 
-	// private static final String p = "Á¦Á¿Ìõ";
+	// private static final String p = "åŠ›é‡æ¡";
 	public Powerbar() {
 		start = false;
 		flag = 1;

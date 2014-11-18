@@ -7,21 +7,21 @@ import java.awt.geom.*;
 import java.util.*;
 
 public class Ball {
-	private Speed speed; // ÇòµÄËÙ¶È
-	private Point2D position; // ÇòÖĞĞÄµ±Ç°Î»ÖÃ
+	private Speed speed; // çƒçš„é€Ÿåº¦
+	private Point2D position; // çƒä¸­å¿ƒå½“å‰ä½ç½®
 	private final Point2D originPos;
-	private Point2D lastPos; // ÇòÉÏÒ»´ÎµÄÎ»ÖÃ
-	private final int value; // ÇòµÄ·ÖÖµ
+	private Point2D lastPos; // çƒä¸Šä¸€æ¬¡çš„ä½ç½®
+	private final int value; // çƒçš„åˆ†å€¼
 	private final int type;
-	private boolean ball_in; // ÇòÊÇ·ñ½øÍø
-	private final Image ballImg; // ÇòµÄÍ¼Æ¬
-	private static final double E = 0.88; // Åö×²ÏµÊı
-	private static final double force = 0.02; // Çò×ÀµÄ×èÁ¦
-	public static final double radius = 10.0; // ÇòµÄ°ë¾¶
+	private boolean ball_in; // çƒæ˜¯å¦è¿›ç½‘
+	private final Image ballImg; // çƒçš„å›¾ç‰‡
+	private static final double E = 0.88; // ç¢°æ’ç³»æ•°
+	private static final double force = 0.02; // çƒæ¡Œçš„é˜»åŠ›
+	public static final double radius = 10.0; // çƒçš„åŠå¾„
 	public static final AudioClip collisound = Applet.newAudioClip(Ball.class
 			.getClassLoader().getResource("Sound/collib.au"));
 	private final double imgWidth = 54.0;
-	private static final Toolkit TLK = Toolkit.getDefaultToolkit(); // ÓÃÀ´½«Í¼Æ¬¶ÁÈëImageÊı×é
+	private static final Toolkit TLK = Toolkit.getDefaultToolkit(); // ç”¨æ¥å°†å›¾ç‰‡è¯»å…¥Imageæ•°ç»„
 	private static final HashMap<String, Integer> bvalue = new HashMap<String, Integer>();
 	static {
 		bvalue.put("white", 0);

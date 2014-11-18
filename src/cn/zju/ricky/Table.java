@@ -7,16 +7,16 @@ import java.io.*;
 import java.net.*;
 
 public class Table {
-	private static final int basex, basey; // ×À×Ó×óÉÏ½ÇµÄ×ø±ê
-	private static final int width, height; // ×À×Ó¿í¸ß
-	private static final int off_x, off_y; // ×À×ÓÄÚ±ß½ç¿í¶È
+	private static final int basex, basey; // æ¡Œå­å·¦ä¸Šè§’çš„åæ ‡
+	private static final int width, height; // æ¡Œå­å®½é«˜
+	private static final int off_x, off_y; // æ¡Œå­å†…è¾¹ç•Œå®½åº¦
 	private static AudioClip ac;
 	private static final int holeRadius = 14;
 	private static final Point2D[] c_point;
 	private static final Point2D[] holes;
 	private static final Rectangle2D boundry;
 	private static final Area MainBallArea;
-	static final Toolkit TLK = Toolkit.getDefaultToolkit(); // ÓÃÀ´½«Í¼Æ¬¶ÁÈëImageÊı×é
+	static final Toolkit TLK = Toolkit.getDefaultToolkit(); // ç”¨æ¥å°†å›¾ç‰‡è¯»å…¥Imageæ•°ç»„
 	private static final Image tableImg = TLK.getImage(Table.class
 			.getClassLoader().getResource("Image/table/table.png"));
 	static {
@@ -92,9 +92,9 @@ public class Table {
 		double t_x = ball.getPos().getX();
 		double t_y = ball.getPos().getY();
 
-		// ½«Çò×À±ß½çÉèÖÃ³Éµ¥ÏòÍ¨¹ı
+		// å°†çƒæ¡Œè¾¹ç•Œè®¾ç½®æˆå•å‘é€šè¿‡
 
-		// Èç¹ûÖ±½ÓÅöµ½Ë®Æ½·½ÏòµÄ×À±ß£¬ÇÒËÙ¶È·½ÏòÓëËù´¦µÄ±ßÍ¬Ïò
+		// å¦‚æœç›´æ¥ç¢°åˆ°æ°´å¹³æ–¹å‘çš„æ¡Œè¾¹ï¼Œä¸”é€Ÿåº¦æ–¹å‘ä¸æ‰€å¤„çš„è¾¹åŒå‘
 		if ((basex + off_x + 10 + Ball.radius <= t_x
 				&& t_x <= width / 2 - Ball.radius - holeRadius || width / 2
 				+ holeRadius + Ball.radius <= t_x
@@ -102,13 +102,13 @@ public class Table {
 				&& ball.getSpeed().dot(0, 1)
 						* (t_y - (basey + off_y + height / 2)) > 0) {
 			ball.setSpeed(ball.getSpeed().getX(), -ball.getSpeed().getY());
-			// Èç¹ûÖ±½ÓÅöµ½ÊúÖ±·½ÏòµÄ×À±ß£¬ÇÒËÙ¶È·½ÏòÓëËù´¦µÄ±ßÍ¬Ïò
+			// å¦‚æœç›´æ¥ç¢°åˆ°ç«–ç›´æ–¹å‘çš„æ¡Œè¾¹ï¼Œä¸”é€Ÿåº¦æ–¹å‘ä¸æ‰€å¤„çš„è¾¹åŒå‘
 		} else if ((basey + off_y + 7 + Ball.radius <= t_y && t_y <= basey
 				+ height - off_y - Ball.radius - 9)
 				&& ball.getSpeed().dot(1, 0)
 						* (t_x - (basex + off_x + width / 2)) > 0) {
 			ball.setSpeed(-ball.getSpeed().getX(), ball.getSpeed().getY());
-			// Èç¹ûÅöµ½×À½Ç£¬ÇÒËÙ¶È·½ÏòÕıÔÚÏò×À±ß¿¿½ü
+			// å¦‚æœç¢°åˆ°æ¡Œè§’ï¼Œä¸”é€Ÿåº¦æ–¹å‘æ­£åœ¨å‘æ¡Œè¾¹é è¿‘
 		} else {
 			Point2D p = ball.getPos();
 			for (int i = 0; i < c_point.length; i++) {
@@ -119,7 +119,7 @@ public class Table {
 							- c_point[i].getY());
 					s.div(s.getV());
 					ball.getSpeed().sub(s.mul(2 * ball.getSpeed().dot(s)));
-					break; // Ã¿´ÎÖ»¿ÉÄÜÅöµ½Ò»¸ö½Ç
+					break; // æ¯æ¬¡åªå¯èƒ½ç¢°åˆ°ä¸€ä¸ªè§’
 				}
 			}
 		}
@@ -157,47 +157,47 @@ public class Table {
 		// - 2 * off_y);
 		// g2d.draw(boundry);
 		// Ellipse2D e;
-		// ×óÉÏ
+		// å·¦ä¸Š
 		// g2d.draw(e = new Ellipse2D.Double(basex + off_x - 2 * Ball.radius,
 		// basey + off_y + 7, 2 * Ball.radius, 2 * Ball.radius));
-		// ×óÏÂ
+		// å·¦ä¸‹
 		// g2d.draw(e = new Ellipse2D.Double(basex + off_x - 2 * Ball.radius,
 		// basey + height - off_y - 2 * Ball.radius - 9, 2 * Ball.radius,
 		// 2 * Ball.radius));
-		// ÉÏÃæÖĞ¼äÁ½¸ö
+		// ä¸Šé¢ä¸­é—´ä¸¤ä¸ª
 		// g2d.draw(e = new Ellipse2D.Double(width / 2 - 2 * Ball.radius
 		// - holeRadius, basey + off_y - 2 * Ball.radius, 2 * Ball.radius,
 		// 2 * Ball.radius));
 		// g2d.draw(e = new Ellipse2D.Double(width / 2 + holeRadius, basey +
 		// off_y
 		// - 2 * Ball.radius, 2 * Ball.radius, 2 * Ball.radius));
-		// ÏÂÃæÖĞ¼äÁ½¸ö
+		// ä¸‹é¢ä¸­é—´ä¸¤ä¸ª
 		// g2d.draw(e = new Ellipse2D.Double(width / 2 - 2 * Ball.radius
 		// - holeRadius, basey + height - off_y, 2 * Ball.radius,
 		// 2 * Ball.radius));
 		// g2d.draw(e = new Ellipse2D.Double(width / 2 + holeRadius, basey
 		// + height - off_y, 2 * Ball.radius, 2 * Ball.radius));
-		// ÓÒÉÏ
+		// å³ä¸Š
 		// g2d.draw(e = new Ellipse2D.Double(basex + width - off_x, basey +
 		// off_y
 		// + 7, 2 * Ball.radius, 2 * Ball.radius));
-		// ÓÒÏÂ
+		// å³ä¸‹
 		// g2d
 		// .draw(e = new Ellipse2D.Double(basex + width - off_x, basey
 		// + height - off_y - 2 * Ball.radius - 9,
 		// 2 * Ball.radius, 2 * Ball.radius));
-		// ÉÏ×ó
+		// ä¸Šå·¦
 		// g2d.draw(e = new Ellipse2D.Double(basex + off_x + 10, basey + off_y -
 		// 2
 		// * Ball.radius, 2 * Ball.radius, 2 * Ball.radius));
-		// ÉÏÓÒ
+		// ä¸Šå³
 		// g2d.draw(e = new Ellipse2D.Double(basex + width - off_x - 2
 		// * Ball.radius - 10, basey + off_y - 2 * Ball.radius,
 		// 2 * Ball.radius, 2 * Ball.radius));
-		// ÏÂ×ó
+		// ä¸‹å·¦
 		// g2d.draw(e = new Ellipse2D.Double(basex + off_x + 10, basey + height
 		// - off_y, 2 * Ball.radius, 2 * Ball.radius));
-		// ÏÂÓÒ
+		// ä¸‹å³
 		// g2d.draw(e = new Ellipse2D.Double(basex + width - off_x - 2
 		// * Ball.radius - 10, basey + height - off_y, 2 * Ball.radius,
 		// 2 * Ball.radius));
